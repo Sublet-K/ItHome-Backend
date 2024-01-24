@@ -104,6 +104,15 @@ export class PostBase {
   })
   @IsBoolean()
   contract: boolean;
+
+  @Transform(({ key, obj }) => {
+    const value = obj[key].toLowerCase();
+    if (value === 'true') return true;
+    else if (value === 'false') return false;
+    else return undefined;
+  })
+  @IsBoolean()
+  local_save: boolean;
 }
 
 export class PostPartialBase {
@@ -213,6 +222,16 @@ export class PostPartialBase {
   @IsOptional()
   @IsString()
   post_code?: string;
+
+  @Transform(({ key, obj }) => {
+    const value = obj[key].toLowerCase();
+    if (value === 'true') return true;
+    else if (value === 'false') return false;
+    else return undefined;
+  })
+  @IsBoolean()
+  @IsOptional()
+  local_save?: boolean;
 }
 
 export class PostExportInterface extends PostBase {

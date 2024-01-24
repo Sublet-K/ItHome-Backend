@@ -66,6 +66,7 @@ export const postCreateStub = (): PostCreateDto => {
     street: 'mock-street',
     street_number: 'mock-street-number',
     post_code: 'mock-post-code',
+    local_save: false,
   };
 };
 

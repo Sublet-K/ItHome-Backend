@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { MongodbService } from '../mongodb/mongodb.service';
 import { writeFile } from 'fs/promises';
 import {
   PostCreateDto,
@@ -10,10 +9,15 @@ import {
 import { PostExportInterface, PostInterface } from '@/interface/post.interface';
 import { UserInterface } from '@/interface/user.interface';
 import { createHash } from 'crypto';
+import { MongodbPostService } from '../mongodb/mongodb.post.service';
+import { MongodbPostImageService } from '../mongodb/mongodb.postimage.service';
 
 @Injectable()
 export class PostService {
-  constructor(private readonly db: MongodbService) {}
+  constructor(
+    private readonly postdb: MongodbPostService,
+    private readonly postimagedb: MongodbPostImageService,
+  ) {}
 
   isPositiveInt(val: number, defaultVal: number) {
     if (typeof val !== 'number') return defaultVal;
@@ -29,7 +33,7 @@ export class PostService {
 
     query.page = this.isPositiveInt(query.page, 1);
 
-    const result = await this.db.getAllPosts(query);
+    const result = await this.postdb.getAllPosts(query);
 
     const ret = result.map((post) => this.transformExport(post));
 
@@ -53,7 +57,7 @@ export class PostService {
     }
 
     // PrismaPostCreateDto 형식에 맞도록 변경하여 createPost에 전달
-    const res: PostInterface = await this.db.createPost(
+    const res: PostInterface = await this.postdb.createPost(
       {
         ...post,
         image_id,
@@ -66,8 +70,17 @@ export class PostService {
 
   // GET /POST/:postKey
   async getOnePost(key: number) {
-    const res = await this.db.getOnePost(key);
+    const res = await this.postdb.getOnePost(key);
     const ret = this.transformExport(res);
+    return ret;
+  }
+
+  // GET /post/local
+  async getLocalPost(user: UserInterface) {
+    const res = await this.postdb.getLocalPost(user);
+    const ret = res.map((ele) => {
+      return this.transformExport(ele);
+    });
     return ret;
   }
 
@@ -88,19 +101,19 @@ export class PostService {
     }
     postUpdateInput.image_id = image_id;
 
-    const res = await this.db.putOnePost(key, postUpdateInput);
+    const res = await this.postdb.putOnePost(key, postUpdateInput);
     const ret = this.transformExport(res);
     return ret;
   }
 
   // DELETE /POST/:postKey
   async deleteOnePost(key: number, user: UserInterface) {
-    const res = await this.db.deleteOnePost(key, user);
+    const res = await this.postdb.deleteOnePost(key, user);
     return res;
   }
 
   async filterPost(query: PostFilterQueryDto) {
-    const res = await this.db.filterPost(query);
+    const res = await this.postdb.filterPost(query);
 
     const ret = res.map((post) => this.transformExport(post));
     return ret;
@@ -116,7 +129,7 @@ export class PostService {
   async findOrUploadImage(file: Express.Multer.File) {
     const image_hash = this.calculateHash(file.buffer);
     try {
-      const res = await this.db.getImage(
+      const res = await this.postimagedb.getImage(
         file.originalname,
         file.mimetype,
         image_hash,
@@ -136,7 +149,7 @@ export class PostService {
       );
     }
     const image_hash = this.calculateHash(file.buffer);
-    const res = await this.db.saveImage(
+    const res = await this.postimagedb.saveImage(
       file.originalname,
       file.mimetype,
       image_hash,

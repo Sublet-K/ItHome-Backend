@@ -1,11 +1,11 @@
 import { UserInterface } from '@/interface/user.interface';
 import { Injectable } from '@nestjs/common';
-import { MongodbService } from '../mongodb/mongodb.service';
 import { ReservationCreateDto } from '@/dto/reservation.dto';
+import { MongodbReservationService } from '../mongodb/mongodb.reservation.service';
 
 @Injectable()
 export class ReservationService {
-  constructor(private db: MongodbService) {}
+  constructor(private db: MongodbReservationService) {}
 
   async createReservation(data: ReservationCreateDto, user: UserInterface) {
     const res = await this.db.createReservation(data, user);

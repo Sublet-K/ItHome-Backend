@@ -4,7 +4,7 @@ import {
   reservationInterfaceStub,
   reservationStub,
   userStub,
-} from './stubs/mongodb.stub';
+} from '../../../stubs/mongodb.stub';
 
 export const MongodbService = jest.fn().mockReturnValue({
   getAllPosts: jest.fn().mockReturnValue([postStub()]),

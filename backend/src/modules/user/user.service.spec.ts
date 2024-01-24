@@ -1,28 +1,36 @@
 import { Test } from '@nestjs/testing';
 import { UserService } from './user.service';
 import { UserExportInterface } from '@/interface/user.interface';
-import { MongodbService } from '../mongodb/mongodb.service';
 import {
   userExportStub,
   userFilterStub,
   userStub,
   userUpdateStub,
-} from '../mongodb/__mocks__/stubs/mongodb.stub';
+} from '../../stubs/mongodb.stub';
+import { MongodbModule } from '../mongodb/mongodb.module';
+import { MongodbUserService } from '../mongodb/mongodb.user.service';
 
-jest.mock('../mongodb/mongodb.service');
+jest.mock('../mongodb/mongodb.post.service');
+jest.mock('../mongodb/mongodb.postimage.service');
+jest.mock('../mongodb/mongodb.postkey.service');
+jest.mock('../mongodb/mongodb.reservation.service');
+jest.mock('../mongodb/mongodb.user.service');
 
 describe('UserService', () => {
   let service: UserService;
-  let mongodbService: MongodbService;
+  let mongodbUserService: MongodbUserService;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module = await Test.createTestingModule({
-      imports: [],
-      providers: [UserService, MongodbService],
+      imports: [MongodbModule],
+      providers: [UserService],
     }).compile();
 
     service = module.get<UserService>(UserService);
-    mongodbService = module.get<MongodbService>(MongodbService);
+    mongodbUserService = module.get<MongodbUserService>(MongodbUserService);
+  });
+
+  beforeEach(() => {
     jest.clearAllMocks();
   });
 
@@ -69,15 +77,15 @@ describe('UserService', () => {
       });
 
       it('then should call db to get a user', () => {
-        expect(mongodbService.getUserByKey).toHaveBeenCalledTimes(1);
+        expect(mongodbUserService.getUserByKey).toHaveBeenCalledTimes(1);
       });
 
       it('then should call db to get one User with given parameters', () => {
-        expect(mongodbService.getUserByKey).toHaveBeenCalledWith(user_id);
+        expect(mongodbUserService.getUserByKey).toHaveBeenCalledWith(user_id);
       });
 
       it('then should call db to get one User', () => {
-        expect(mongodbService.getUserByKey).toHaveBeenCalledTimes(1);
+        expect(mongodbUserService.getUserByKey).toHaveBeenCalledTimes(1);
       });
     });
   });
@@ -96,7 +104,7 @@ describe('UserService', () => {
         expect(result).toBeDefined();
       });
       it('then should call db to create user', () => {
-        expect(mongodbService.createUser).toHaveBeenCalledTimes(1);
+        expect(mongodbUserService.createUser).toHaveBeenCalledTimes(1);
       });
     });
   });
@@ -117,11 +125,13 @@ describe('UserService', () => {
       });
 
       it('then should call db to delete user', () => {
-        expect(mongodbService.deleteOneUser).toHaveBeenCalledTimes(1);
+        expect(mongodbUserService.deleteOneUser).toHaveBeenCalledTimes(1);
       });
 
       it('then should call db to delete user with given parameters', () => {
-        expect(mongodbService.deleteOneUser).toHaveBeenCalledWith('example');
+        expect(mongodbUserService.deleteOneUser).toHaveBeenCalledWith(
+          'example',
+        );
       });
     });
   });
@@ -142,11 +152,11 @@ describe('UserService', () => {
       });
 
       it('then should call db to update user', () => {
-        expect(mongodbService.putOneUser).toHaveBeenCalledTimes(1);
+        expect(mongodbUserService.putOneUser).toHaveBeenCalledTimes(1);
       });
 
       it('then should db to update user with given parameters', () => {
-        expect(mongodbService.putOneUser).toHaveBeenCalledWith(
+        expect(mongodbUserService.putOneUser).toHaveBeenCalledWith(
           'mocked-user_id',
           userUpdateStub(),
         );
@@ -171,11 +181,11 @@ describe('UserService', () => {
       });
 
       it('then should call db to filter user', () => {
-        expect(mongodbService.filterUser).toHaveBeenCalledTimes(1);
+        expect(mongodbUserService.filterUser).toHaveBeenCalledTimes(1);
       });
 
       it('then should call db to filter user with given parameters', () => {
-        expect(mongodbService.filterUser).toHaveBeenCalledWith(
+        expect(mongodbUserService.filterUser).toHaveBeenCalledWith(
           userFilterStub(),
         );
       });

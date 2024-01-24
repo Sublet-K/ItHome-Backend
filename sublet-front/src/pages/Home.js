@@ -5,22 +5,35 @@ import { Link } from 'react-router-dom';
 import Button from '@mui/material/Button';
 
 export default function Home() {
-  const [roomsData, setData] = useState(null);
-  const [likes, setLikes] = useState({})
+  const [roomsData, setRoomsData] = useState([]);
+  const [preRoomsData, setPreRoomsData] = useState([]);
+  const [likes, setLikes] = useState({}); // 백엔드 연결 필요.
+  const [listRoomAmount, setListRoomAmount] = useState(6);
+  const [listPageAmount, setListPageAmount] = useState(1);
+
+
+  const fetchRooms = (listRoomAmount, listPageAmount) => { // 6개 저 보여주기 필요할 수도..?
+    fetch(process.env.REACT_APP_BACKEND_URL + "/post" + `?maxPost=${listRoomAmount}&page=${listPageAmount}`)
+      .then((ele) => ele.json())
+      .then((ele) => setPreRoomsData(ele));
+    if (preRoomsData.length !== 0)
+      setRoomsData([...roomsData, ...preRoomsData]);
+  }
 
   useEffect(() => {
-    fetch(process.env.REACT_APP_BACKEND_URL + "/post")
-      .then((ele) => ele.json())
-      .then((ele) => setData(ele));
+    async function fetchData() {
+      const res = await fetch(process.env.REACT_APP_BACKEND_URL + "/post" + `?maxPost=${listRoomAmount}&page=${listPageAmount}`);
+      const data = await res.json();
+      setPreRoomsData(data);
+      setRoomsData([...roomsData, ...data]);
+    }
+    fetchData();
   }, []);
 
   const toggleLikes = (item) => () => {
-    console.log(likes)
-    if (item.key in likes) { // likes.filter(likesItem => likesItem.key !== item.key)
+    if (item.key in likes) {
       let newLikes = {}
-      // console.log(likes)
       Object.keys(likes).map(newItem => {
-        // console.log(item.key+"  "+newItem.toString())
         if (likes[newItem].key !== item.key) {
           newLikes = { ...newLikes, [newItem]: likes[newItem] }
         }
@@ -45,7 +58,15 @@ export default function Home() {
     */
   }
 
+  const showMoreRooms = () => {
+    setListPageAmount(listPageAmount + 1);
+    fetchRooms(listRoomAmount, listPageAmount);
+  }
+
   const styles = {
+    container: {
+      marginBottom: "10rem",
+    },
     mainContainer: {
       display: "flex",
       flexDirection: "column",
@@ -66,6 +87,9 @@ export default function Home() {
     requirementSubmitButton: {
       marginRight: '0.7em',
     },
+    moreRoomDescription: {
+      marginTop: '3rem',
+    }
   };
 
   let rooms = roomsData?.map((room) => (
@@ -97,6 +121,15 @@ export default function Home() {
         <div style={styles.roomContainer}>
           {rooms}
         </div>
+        {
+          preRoomsData.length !== 0
+            ?
+            <Button variant="contained" style={styles.requirementSubmitButton} onClick={showMoreRooms}>
+              방 더보기
+            </Button>
+            :
+            <div style={styles.moreRoomDescription}>더 불러올 방이 없습니다..</div>
+        }
       </div>
     </div>
   );

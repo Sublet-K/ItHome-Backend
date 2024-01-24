@@ -1,52 +1,49 @@
 import { Injectable } from '@nestjs/common';
-import { MongodbService } from '../mongodb/mongodb.service';
 import { UserExportInterface, UserInterface } from '@/interface/user.interface';
 import { UserCreateDto, UserFilterDto, UserUpdateDto } from '@/dto/user.dto';
+import { MongodbUserService } from '../mongodb/mongodb.user.service';
 import { createHash } from 'crypto';
 import { writeFile } from 'fs/promises';
 
 @Injectable()
 export class UserService {
-  constructor(private db: MongodbService) {}
+  constructor(private userdb: MongodbUserService) {}
 
   async getAllUser() {
-    const user = await this.db.getAllUser();
+    const user = await this.userdb.getAllUser();
     const userExport = user.map((ele) => this.transformExport(ele));
     return userExport;
   }
 
   async getUserByKey(user_id: string) {
-    const user = await this.db.getUserByKey(user_id);
+    const user = await this.userdb.getUserByKey(user_id);
     const exportUser = this.transformExport(user);
     return exportUser;
   }
 
   async validateUser(user_id: string, password: string) {
-    const user = await this.db.validateUser(user_id, password);
+    const user = await this.userdb.validateUser(user_id, password);
+    const exportUser = this.transformExport(user);
+    return exportUser;
+  }
+  async createUser(data: UserCreateDto) {
+    const user = await this.userdb.createUser(data);
     const exportUser = this.transformExport(user);
     return exportUser;
   }
 
-  async createUser(user: UserCreateDto) {
-    const res = await this.db.createUser({
-      ...user,
-    });
-    const exportUser = this.transformExport(res);
-    return exportUser;
-  }
-
   async deleteOneUser(user_id: string) {
-    const res = await this.db.deleteOneUser(user_id);
+    const res = await this.userdb.deleteOneUser(user_id);
     return res;
   }
   async putOneUser(user_id: string, putUserBody: UserUpdateDto) {
-    const user = await this.db.putOneUser(user_id, putUserBody);
+    const user = await this.userdb.putOneUser(user_id, putUserBody);
     const exportUser = this.transformExport(user);
     return exportUser;
   }
 
   async filterUser(query: UserFilterDto) {
-    const res = await this.db.filterUser(query);
+    const res = await this.userdb.filterUser(query);
 
     const ret = res.map((user) => this.transformExport(user));
     return ret;
@@ -57,7 +54,10 @@ export class UserService {
     const img_res = await this.uploadImage(file);
     const image_id = img_res.id;
 
-    const res: UserInterface = await this.db.putUserImage(user_id, image_id);
+    const res: UserInterface = await this.userdb.putUserImage(
+      user_id,
+      image_id,
+    );
     const ret = this.transformExport(res);
     return ret;
   }
@@ -72,7 +72,7 @@ export class UserService {
   async findOrUploadImage(file: Express.Multer.File) {
     const image_hash = this.calculateHash(file.buffer);
     try {
-      const res = await this.db.getUserImage(
+      const res = await this.userdb.getUserImage(
         file.originalname,
         file.mimetype,
         image_hash,
@@ -92,7 +92,7 @@ export class UserService {
       );
     }
     const image_hash = this.calculateHash(file.buffer);
-    const res = await this.db.saveUserImage(
+    const res = await this.userdb.saveUserImage(
       file.originalname,
       file.mimetype,
       image_hash,

@@ -1,6 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PostService } from './post.service';
-import { MongodbService } from '../mongodb/mongodb.service';
 import { PostExportInterface } from '@/interface/post.interface';
 import {
   filterStub,
@@ -9,22 +8,34 @@ import {
   postExportStub,
   postStub,
   userStub,
-} from '../mongodb/__mocks__/stubs/mongodb.stub';
+} from '../../stubs/mongodb.stub';
+import { MongodbPostService } from '../mongodb/mongodb.post.service';
+import { MongodbPostImageService } from '../mongodb/mongodb.postimage.service';
+import { MongodbModule } from '../mongodb/mongodb.module';
 
-jest.mock('../mongodb/mongodb.service');
+jest.mock('../mongodb/mongodb.post.service');
+jest.mock('../mongodb/mongodb.postimage.service');
+jest.mock('../mongodb/mongodb.postkey.service');
+jest.mock('../mongodb/mongodb.reservation.service');
+jest.mock('../mongodb/mongodb.user.service');
 
 describe('PostService', () => {
   let service: PostService;
-  let mongoDbService: MongodbService;
+  let mongoDbPostService: MongodbPostService;
+  let mongodbPostImageService: MongodbPostImageService;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [],
-      providers: [PostService, MongodbService],
+      imports: [MongodbModule],
+      providers: [PostService],
     }).compile();
 
     service = module.get<PostService>(PostService);
-    mongoDbService = module.get(MongodbService);
+    mongoDbPostService = module.get(MongodbPostService);
+    mongodbPostImageService = module.get(MongodbPostImageService);
+  });
+
+  beforeEach(() => {
     jest.clearAllMocks();
   });
 
@@ -44,7 +55,7 @@ describe('PostService', () => {
       });
 
       it('should call db with default parameters', async () => {
-        expect(mongoDbService.getAllPosts).toHaveBeenCalledWith({
+        expect(mongoDbPostService.getAllPosts).toHaveBeenCalledWith({
           maxPost: 6,
           page: 1,
         });
@@ -70,7 +81,7 @@ describe('PostService', () => {
       });
 
       it('should call db with given parameters', async () => {
-        expect(mongoDbService.getAllPosts).toHaveBeenCalledWith({
+        expect(mongoDbPostService.getAllPosts).toHaveBeenCalledWith({
           maxPost: 10,
           page: 2,
         });
@@ -92,7 +103,7 @@ describe('PostService', () => {
       });
 
       it('should call db with default parameters', async () => {
-        expect(mongoDbService.getAllPosts).toHaveBeenCalledWith({
+        expect(mongoDbPostService.getAllPosts).toHaveBeenCalledWith({
           maxPost: 6,
           page: 1,
         });
@@ -121,11 +132,11 @@ describe('PostService', () => {
       });
 
       it('then should call db to upload image', () => {
-        expect(mongoDbService.saveImage).toHaveBeenCalledTimes(1);
+        expect(mongodbPostImageService.saveImage).toHaveBeenCalledTimes(1);
       });
 
       it('then should call db to upload image with given parameters', () => {
-        expect(mongoDbService.saveImage).toHaveBeenCalledWith(
+        expect(mongodbPostImageService.saveImage).toHaveBeenCalledWith(
           multerFileStub().originalname,
           multerFileStub().mimetype,
           'e8b2e35ef48996ac55a7519640fbeee4fd7f2d595376a663ec873f562703b2dc',
@@ -133,12 +144,12 @@ describe('PostService', () => {
       });
 
       it('then should call db to create post', () => {
-        expect(mongoDbService.createPost).toHaveBeenCalledTimes(1);
+        expect(mongoDbPostService.createPost).toHaveBeenCalledTimes(1);
         const post = postStub();
         post['start_day'] = new Date(post['start_day']);
         post['end_day'] = new Date(post['end_day']);
         post['image_id'] = [imageStub().id];
-        expect(mongoDbService.createPost).toHaveBeenCalledWith(
+        expect(mongoDbPostService.createPost).toHaveBeenCalledWith(
           post,
           userStub(),
         );
@@ -164,11 +175,11 @@ describe('PostService', () => {
       });
 
       it('then should call db to get one post', () => {
-        expect(mongoDbService.getOnePost).toHaveBeenCalledTimes(1);
+        expect(mongoDbPostService.getOnePost).toHaveBeenCalledTimes(1);
       });
 
       it('then should call db to get one post with given parameters', () => {
-        expect(mongoDbService.getOnePost).toHaveBeenCalledWith(postKey);
+        expect(mongoDbPostService.getOnePost).toHaveBeenCalledWith(postKey);
       });
     });
   });
@@ -194,7 +205,7 @@ describe('PostService', () => {
       });
 
       it('then should call db to update post', () => {
-        expect(mongoDbService.putOnePost).toHaveBeenCalledTimes(1);
+        expect(mongoDbPostService.putOnePost).toHaveBeenCalledTimes(1);
       });
 
       it('then should call db to update post with given parameters', () => {
@@ -204,18 +215,18 @@ describe('PostService', () => {
         };
         callPost['start_day'] = new Date(callPost['start_day']);
         callPost['end_day'] = new Date(callPost['end_day']);
-        expect(mongoDbService.putOnePost).toHaveBeenCalledWith(
+        expect(mongoDbPostService.putOnePost).toHaveBeenCalledWith(
           postStub().key,
           callPost,
         );
       });
 
       it("then should call db to get post's image", () => {
-        expect(mongoDbService.getImage).toHaveBeenCalledTimes(1);
+        expect(mongodbPostImageService.getImage).toHaveBeenCalledTimes(1);
       });
 
       it("then should call db to get post's image with given parameters", () => {
-        expect(mongoDbService.getImage).toHaveBeenCalledWith(
+        expect(mongodbPostImageService.getImage).toHaveBeenCalledWith(
           multerFileStub().originalname,
           multerFileStub().mimetype,
           'e8b2e35ef48996ac55a7519640fbeee4fd7f2d595376a663ec873f562703b2dc',
@@ -240,11 +251,11 @@ describe('PostService', () => {
       });
 
       it('then should call db to delete post', () => {
-        expect(mongoDbService.deleteOnePost).toHaveBeenCalledTimes(1);
+        expect(mongoDbPostService.deleteOnePost).toHaveBeenCalledTimes(1);
       });
 
       it('then should call db to delete post with given parameters', () => {
-        expect(mongoDbService.deleteOnePost).toHaveBeenCalledWith(
+        expect(mongoDbPostService.deleteOnePost).toHaveBeenCalledWith(
           postStub().key,
           userStub(),
         );
@@ -269,11 +280,13 @@ describe('PostService', () => {
       });
 
       it('then should call db to filter post', () => {
-        expect(mongoDbService.filterPost).toHaveBeenCalledTimes(1);
+        expect(mongoDbPostService.filterPost).toHaveBeenCalledTimes(1);
       });
 
       it('then should call db to filter post with given parameters', () => {
-        expect(mongoDbService.filterPost).toHaveBeenCalledWith(filterStub());
+        expect(mongoDbPostService.filterPost).toHaveBeenCalledWith(
+          filterStub(),
+        );
       });
     });
   });

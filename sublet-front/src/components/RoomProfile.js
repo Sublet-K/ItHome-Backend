@@ -1,7 +1,10 @@
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
+import { useNavigate } from 'react-router-dom';
 
 const RoomProfile = ({ room, toggleLikes, likes }) => {
+  const navigate = useNavigate();
+
   const styles = {
     container: {
       display: "flex",
@@ -22,14 +25,16 @@ const RoomProfile = ({ room, toggleLikes, likes }) => {
     },
   };
 
-  const moveToRoomInfo = () => {
-    window.location.href = "/room/" + room.key;
-  }
+  const moveToRoomInfo = ({ room }) => { // 일단 방 정보 넘김과 동시에 방 정보 페이지로 이동.
+    navigate('/roominfo', {
+      room: room,
+    });
+  };
 
   if (!room) return <div></div>;
   return (
     <div style={styles.container}>
-      <IconButton onClick={moveToRoomInfo}>
+      <IconButton onClick={() => moveToRoomInfo({ room })}>
         <img
           src={
             process.env.REACT_APP_BACKEND_URL +
@@ -41,7 +46,7 @@ const RoomProfile = ({ room, toggleLikes, likes }) => {
         />
       </IconButton>
       <div style={styles.roomTitleAndLike}>
-        <span onClick={moveToRoomInfo}>
+        <span onClick={() => moveToRoomInfo({ room })}>
           <div style={styles.roomTitle}>
             {room.city} {room.gu} {room.dong}
           </div>

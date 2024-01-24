@@ -1,16 +1,14 @@
 import { Test } from '@nestjs/testing';
 import { AuthService } from './auth.service';
 import { UserService } from '../user/user.service';
-import { MongodbService } from '../mongodb/mongodb.service';
-import { PrismaService } from '../prisma/prisma.service';
+import { MongodbModule } from '../mongodb/mongodb.module';
 describe('AuthService', () => {
   let service: AuthService;
-  jest.mock('../mongodb/mongodb.service');
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports: [],
-      providers: [AuthService, UserService, MongodbService, PrismaService],
+      imports: [MongodbModule],
+      providers: [AuthService, UserService],
     }).compile();
 
     service = module.get<AuthService>(AuthService);

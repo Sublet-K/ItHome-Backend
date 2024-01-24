@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { PassportSerializer } from '@nestjs/passport';
-import { MongodbService } from '../mongodb/mongodb.service';
 import { UserInterface } from '@/interface/user.interface';
+import { MongodbUserService } from '../mongodb/mongodb.user.service';
 
 @Injectable()
 export class localSerializer extends PassportSerializer {
-  constructor(private readonly db: MongodbService) {
+  constructor(private readonly db: MongodbUserService) {
     super();
   }
 

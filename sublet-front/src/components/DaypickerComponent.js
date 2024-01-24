@@ -62,11 +62,6 @@ const DaypickerComponent = () => {
       </LocalizationProvider>
     );
   }
-  else if (false) { // 만약 DatePicker에서 날짜가 선택되었다면 else if로 startProps와 endProps를 띄워준다.
-    return (
-      <></>
-    );
-  }
   else {
     return (
       <button ref={buttonRef} onClick={toggleCalander}>

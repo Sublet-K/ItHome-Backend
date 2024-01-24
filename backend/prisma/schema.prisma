@@ -65,6 +65,7 @@ model Post {
   street            String
   street_number     String
   post_code         String
+  local_save        Boolean       @default(false)
 }
 
 model IncrementKey {

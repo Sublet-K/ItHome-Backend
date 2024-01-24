@@ -45,8 +45,6 @@ const PriceRangeFilter = () => {
   };
 
   const handleSubmit = () => {
-    // Implement the logic to filter the search results based on the price range
-    console.log(setPriceRange);
     setPriceRange(tempPriceRange);
     setIsListVisible(false);
   };

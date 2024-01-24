@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export const usePopUpStore = create((set) => ({
+export const useLoginPopUpStore = create((set) => ({
   popUpState: false,
   setPopUpState: () => set((state) => ({
     popUpState: !state.popUpState
@@ -8,3 +8,6 @@ export const usePopUpStore = create((set) => ({
 
 }))
 
+export const useGuestInfoStore = create((set) => ({
+
+}))

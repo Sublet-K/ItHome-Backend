@@ -1,14 +1,14 @@
 import { useState } from "react";
 import Modal from 'react-bootstrap/Modal';
-import {Login, Logout} from "../components/Login";
+import { Login } from "../components/Login";
 import * as s from "../components/styles/Login.styles"
-import { usePopUpStore } from "../components/store/loginStore";
+import { useLoginPopUpStore } from "../components/store/Store";
 
 
 function PopUp() {
   const [idState, setIdState] = useState('')
   const [passwordState, setPasswordState] = useState('')
-  const { setPopUpState, popUpState } = usePopUpStore((state) => ({ setPopUpState: state.setPopUpState, popUpState: state.popUpState }))
+  const { setPopUpState, popUpState } = useLoginPopUpStore((state) => ({ setPopUpState: state.setPopUpState, popUpState: state.popUpState }))
 
   const idChange = (e) => {
     setIdState(e.target.value)
@@ -84,7 +84,7 @@ function LoginPage() {
       <button onClick={popUp}>Login</button>
       {popUpState &&
         <PopUp></PopUp>}
-      
+
     </div>
   )
 }

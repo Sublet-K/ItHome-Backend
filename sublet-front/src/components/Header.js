@@ -7,13 +7,16 @@ import DaypickerComponent from './DaypickerComponent.js';
 import PriceRangeFilter from './PriceRangeFilter.js';
 import { Favorite } from '@mui/icons-material'
 import PersonIcon from '@mui/icons-material/Person';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import makeHeaderStyle from './styles/Header.styles.js'; // css style here.
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [searchButtonClicked, setSearchButtonClicked] = useState(false)
   const [loginedTest, setLoginedTest] = useState(true); // 로그인 테스트 (true: 로그인, false: 로그아웃)
   const inputRef = useRef(null);
+  const location = useLocation();
+  const styles = makeHeaderStyle(); // css style here.
 
   useEffect(() => {
     if (searchButtonClicked) {
@@ -22,89 +25,13 @@ const Header = () => {
   }, [searchButtonClicked]);
 
   const handleReload = () => {
-    window.location.reload(); // 새로고침이 아닌 메인 페이지로 이동하도록 변경 필요.
+    if (location.pathname === '/') {
+      window.location.reload();
+    }
+    else {
+      window.location.href = '/';
+    }
   };
-
-  const styles = {
-    container: {
-      borderBottom: '1px solid gray',
-      marginBottom: '0.5em',
-    },
-    headerContainer: {
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-      width: '100%',
-    },
-    logoContainer: {
-      display: 'flex',
-      flex: 1,
-    },
-    logoIcon: {
-      width: '4em',
-      height: '100%',
-      color: 'rgba(0, 0, 0, 1)',
-      justifyContent: 'left',
-    },
-    searchBoxContainer: {
-      display: 'flex',
-      flexDirection: 'row',
-      margin: '0 0 0.5em 0',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      border: '1px solid #000000',
-      borderRadius: '5px',
-      padding: '1em',
-      fontSize: '1.3em',
-      flex: 5,
-    },
-    searchByLocation: {
-      fontWeight: 'bold',
-      color: 'rgba(0, 0, 0, 1)',
-    },
-    searchByKeywordContainer: {
-      display: 'flex',
-      flex: 1,
-    },
-    serachByKeyword: {
-      marginRight: '0.5em',
-    },
-    searchKeywordBig: {
-      border: '0px',
-      fontWeight: 'bold',
-    },
-    serachByKeywordInput: {
-      display: 'flex',
-      flex: 1,
-      border: '1px',
-    },
-    searchKeyworddescription: {
-      fontSize: '0.6em',
-      textAlign: 'left',
-    },
-    searchIcon: {
-      color: 'rgba(0, 0, 0, 1)',
-    },
-    rightNavigation: {
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'right',
-      flex: 1,
-    },
-    favorite: {
-      display: 'flex',
-      flexDirection: 'column',
-      marginRight: '1em',
-      color: 'rgba(0, 0, 0, 1)',
-    },
-    favoriteCount: {
-      fontSize: '0.8em',
-    },
-    profile: {
-      color: 'rgba(0, 0, 0, 1)',
-    },
-  }
 
   return (
     <header className="bg-white" style={styles.container}>
@@ -155,12 +82,12 @@ const Header = () => {
             <div style={styles.rightNavigation}>
               <span>
                 <IconButton style={styles.favorite}>
-                  {/*<Link>*/}
-                  <Favorite />
-                  <div style={styles.favoriteCount}>
-                    {33 + 1}
-                  </div>
-                  {/*</Link>*/}
+                  <Link to={"/SaveSubletInfo"}>
+                    <Favorite />
+                    <div style={styles.favoriteCount}>
+                      {33 + 1}
+                    </div>
+                  </Link>
                 </IconButton>
               </span>
               <IconButton>
@@ -179,6 +106,20 @@ const Header = () => {
           }
         </div>
       </nav>
+    </header >
+  )
+}
+
+export default Header;
+
+/*
+        모바일 용으로 쓸 만 할 듯.
+        <div className="flex lg:hidden">
+          <button type="button" className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700" onClick={() => setMobileMenuOpen(true)}>
+            <span className="sr-only">Open main menu</span>
+            <Bars3Icon className="h-6 w-6" aria-hidden="true" />
+          </button>
+        </div>
       <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
         <div className="fixed inset-0 z-10" />
         <Dialog.Panel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
@@ -197,20 +138,6 @@ const Header = () => {
           </div>
         </Dialog.Panel>
       </Dialog>
-    </header >
-  )
-}
-
-export default Header;
-
-/*
-        모바일 용으로 쓸 만 할 듯.
-        <div className="flex lg:hidden">
-          <button type="button" className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700" onClick={() => setMobileMenuOpen(true)}>
-            <span className="sr-only">Open main menu</span>
-            <Bars3Icon className="h-6 w-6" aria-hidden="true" />
-          </button>
-        </div>
 */
 
 /* 추천 검색어 (보류)

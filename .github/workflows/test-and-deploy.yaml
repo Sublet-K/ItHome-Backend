@@ -39,6 +39,7 @@ jobs:
     needs: [run-test]
     if: |
       always() &&
+      github.repository_owner == 'Sublet-K' &&
       (needs.run-test.result == 'success' || needs.run-test.result == 'skipped') &&
       github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
