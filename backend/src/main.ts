@@ -11,6 +11,7 @@ async function bootstrap() {
   //   key: fs.readFileSync('./key.pem'),
   //   cert: fs.readFileSync('./cert.pem'),
   // };
+
   // const app = await NestFactory.create(AppModule, {
   //   cors: true,
   //   httpsOptions,
@@ -39,6 +40,6 @@ async function bootstrap() {
 
   const mongoIoAdapter = new MongoIoAdapter(app);
   await mongoIoAdapter.connectToMongo();
-  await app.listen(Number(env.BACKEND_PORT as string));
+  await app.listen(4000);
 }
 bootstrap();

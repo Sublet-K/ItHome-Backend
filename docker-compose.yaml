@@ -13,7 +13,7 @@ services:
     environment:
       DBHOST: mongo
     ports:
-      - "$BACKEND_PORT:$BACKEND_PORT"
+      - "4000:4000"
     depends_on:
       - mongo
     networks:
@@ -24,15 +24,15 @@ services:
       context: ./backend
       dockerfile: database.Dockerfile
     environment:
-      MONGO_INITDB_ROOT_USERNAME: $MONGO_USERNAME
-      MONGO_INITDB_ROOT_PASSWORD: $MONGO_PASSWORD
-      MONGO_INITDB_DATABASE: $MONGO_INITDB_DATABASE
-      MONGO_REPLICA_HOST: $MONGO_REPLICA_HOST
-      MONGO_REPLICA_PORT: $MONGO_PORT
+      MONGO_INITDB_ROOT_USERNAME: test
+      MONGO_INITDB_ROOT_PASSWORD: testpwd
+      MONGO_INITDB_DATABASE: Sublet
+      MONGO_REPLICA_HOST: mongo
+      MONGO_REPLICA_PORT: "27017"
     ports:
-      - "$MONGO_PORT:$MONGO_PORT"
+      - "27017:27017"
     expose:
-      - "$MONGO_PORT"
+      - "27017"
     networks:
       - backend-net
     volumes:
@@ -43,24 +43,23 @@ services:
       context: ./backend
       dockerfile: test-db.Dockerfile
     ports:
-      - "$TESTDB_PORT:$MONGO_PORT"
+      - "7777:27017"
     environment:
-      MONGO_INITDB_ROOT_USERNAME: $MONGO_TEST_USERNAME
-      MONGO_INITDB_ROOT_PASSWORD: $MONGO_TEST_PASSWORD
-      MONGO_INITDB_DATABASE: $MONGO_INITDB_DATABASE
-      MONGO_REPLICA_HOST: $MONGO_REPLICA_TEST_HOST
-      MONGO_REPLICA_PORT: $MONGO_PORT
+      MONGO_INITDB_ROOT_USERNAME: test
+      MONGO_INITDB_ROOT_PASSWORD: testpwd
+      MONGO_INITDB_DATABASE: Sublet
+      MONGO_REPLICA_HOST: test-db
+      MONGO_REPLICA_PORT: "27017"
     networks:
       - backend-net
   front:
-    container_name: front-container
     build:
       context: ./sublet-front
       network: host
     depends_on:
       - backend
     ports:
-      - "$FRONTEND_PORT:$FRONTEND_PORT"
+      - "3000:3000"
 networks:
   backend-net:
     driver: bridge

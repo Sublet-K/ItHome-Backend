@@ -5,16 +5,9 @@ on:
     branches:
       - main
       - "backend/**"
-      - "docker"
-    paths:
-      - "backend/**"
-      - "docker-compose.yaml"
-      - ".github/**"
   pull_request:
     paths:
       - "backend/**"
-      - "docker-compose.yaml"
-      - ".github/**"
 
 jobs:
   run-test:
@@ -38,20 +31,6 @@ jobs:
         run: npm run lint
       - name: Run unit test
         run: npm run test
-      - name: Set env file
-        run: |
-          echo "MONGO_TEST_USERNAME=test
-          MONGO_TEST_PASSWORD=testpwd
-          MONGO_INITDB_DATABASE=Sublet
-          MONGO_REPLICA_TEST_HOST=test-db
-          MONGO_PORT=\"27017\"
-          TESTDB_PORT=\"7777\"
-          FRONTEND_PORT=\"22345\"
-          BACKEND_PORT=\"12345\"
-          MONGO_PASSWORD=passwd
-          MONGO_REPLICA_HOST=mongo_replica_host
-          MONGO_USERNAME=username
-          " > ../.env
       - name: Run e2e test
         run: npm run test:e2e
   deploy-server:
@@ -76,18 +55,6 @@ jobs:
           REMOTE_PORT: ${{ secrets.REMOTE_PORT }}
           SCRIPT_AFTER: |
             cd ${{ secrets.REMOTE_TARGET }}
-            echo "BACKEND_PORT=\"${{ secrets.BACKEND_PORT }}\"
-            MONGO_USERNAME=${{ secrets.MONGO_USERNAME }}
-            MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }}
-            MONGO_TEST_USERNAME=${{ secrets.MONGO_TEST_USERNAME }}
-            MONGO_TEST_PASSWORD=${{ secrets.MONGO_TEST_PASSWORD }}
-            MONGO_INITDB_DATABASE=${{ secrets.MONGO_INITDB_DATABASE }}
-            MONGO_REPLICA_HOST=${{ secrets.MONGO_REPLICA_HOST }}
-            MONGO_REPLICA_TEST_HOST=${{ secrets.MONGO_REPLICA_TEST_HOST }}
-            MONGO_PORT=\"${{ secrets.MONGO_PORT }}\"
-            TESTDB_PORT=\"${{ secrets.TESTDB_PORT }}\"
-            FRONTEND_PORT=\"${{ secrets.FRONTEND_PORT }}\"
-            " > .env
             echo "DATABASE_URL=\"${{ secrets.ENV_DATABASE_URL }}\"
             NODE_ENV=\"${{ secrets.NODE_ENV }}\"
             SESSION_SECRET=\"${{ secrets.SESSION_SECRET }}\"
