@@ -403,6 +403,47 @@ const toggleLikes = (item, likes, setLikes) => () => {
   }
 };
 
+async function FetchRequestPost({
+  price,
+  startDay,
+  endDay,
+  limitPeople,
+  numberRoom,
+  numberBathroom,
+  numberBedroom,
+  accomodationType,
+  buildingType,
+  contract,
+  city,
+  gu,
+  dong,
+  alarm,
+  school }) {
+  fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/request`, {
+    ...headerOptions('POST'),
+    body: JSON.stringify({
+      price: price,
+      startDay: startDay,
+      endDay: endDay,
+      limitPeople: limitPeople,
+      numberRoom: numberRoom,
+      numberBathroom: numberBathroom,
+      numberBedroom: numberBedroom,
+      accomodationType: accomodationType,
+      buildingType: buildingType,
+      contract: contract,
+      city: city,
+      gu: gu,
+      dong: dong,
+      alarm: alarm,
+      school: school,
+    }),
+  })
+    .then(notFoundError)
+    .catch(raiseError('GuestRequestPost'));
+}
+
+
 export {
   FetchVerifyUser,
   FetchResetPassword,
@@ -430,4 +471,5 @@ export {
   FetchEditPost,
   FetchConverURLtoFile,
   toggleLikes,
+  FetchRequestPost,
 };

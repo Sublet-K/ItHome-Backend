@@ -1,5 +1,5 @@
-import * as s from '../styles/GuestRequest.styles';
-import GuestRequeststyles from "../styles/GuestRequest.styles";
+import * as s from '../../styles/GuestRequest.styles';
+import GuestRequeststyles from "../../styles/GuestRequest.styles";
 
 export function MoreDetails() {
 	const styles = GuestRequeststyles();

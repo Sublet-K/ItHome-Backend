@@ -24,112 +24,118 @@ ${tw`text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 fo
 `;
 
 export const GuestRequestDetail = styled.div`
-  display: flex;
-  flexWrap: wrap;
-  flexDirection: column;
-  margin: 0 2px 0 0;
+	display: flex;
+	flexWrap: wrap;
+	flexDirection: column;
+	margin: 0 2px 0 0;
 `;
 
 export const GuestRequestMap = styled.div`
-  aspectRatio: 1 / 1;
+	aspectRatio: 1 / 1;
+`
+
+export const UserInfoContainer = styled.div`
+	display: flex;
+	flexDirection: row;
+	width: 100%;
+	margin: 0 0 1em 0;
+	justifyContent: space-around;
+	alignItems: center;
+	border: 2px solid #000000;
+	borderRadius: 10px;
+	padding: 0.2em;
+	fontSize: 1.3em;
+`
+
+export const UserInfoContainer2 = styled.div`
+	width: 25em;
+	position: relative;
+	display: flex;
+	justifyContent: start;
+	alignItems: center;
+	margin: 0 0 1em 0;
+`
+
+export const DetailTitle = styled.p`
+	fontWeight: bold;
+	color: rgba(0, 0, 0, 1);
+	margin: 0.5em 0;
+	font: extrabold;
+	fontSize: 1.5rem;
+`
+
+export const GuestRequestmap = styled.div`
+	aspectRatio: 1 / 1;
 `
 
 const GuestRequeststyles = () => {
-  const styles = {
-    BigContainer: {
-      display: 'flex',
-      justifyContent: 'center',
-      alignTiems: 'center',
-      flexDirection: 'column',
-      margin: '1em 15em 0 15em',
-    },
-    GuestRequest_RequestContainer: {
-      display: 'flex',
-      flexDirection: 'column',
-    },
-    logoContainer: {
-      display: 'flex',
-      flex: 1,
-    },
-    logoIcon: {
-      width: '4em',
-      height: '100%',
-      color: 'rgba(0, 0, 0, 1)',
-      justifyContent: 'left',
-    },
-    GuestRequest_Content: {
-      margin: '2em 0 0 0',
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-    },
+	const styles = {
+		BigContainer: {
+			display: 'flex',
+			justifyContent: 'center',
+			alignTiems: 'center',
+			flexDirection: 'column',
+			margin: '1em 15em 0 15em',
+		},
+		GuestRequest_RequestContainer: {
+			display: 'flex',
+			flexDirection: 'column',
+		},
+		logoContainer: {
+			display: 'flex',
+			flex: 1,
+		},
+		logoIcon: {
+			width: '4em',
+			height: '100%',
+			color: 'rgba(0, 0, 0, 1)',
+			justifyContent: 'left',
+		},
+		GuestRequest_Content: {
+			margin: '2em 0 0 0',
+			display: 'flex',
+			flexDirection: 'row',
+			justifyContent: 'space-between',
+		},
+		RequestBox: {
+			flexDirection: 'colum',
+			justifyContent: 'start',
+		},
+		Requestselect: {
 
-    GuestRequest_DetailTitle: {
+		},
+		RequestLocation: {
+			fontWeight: 'bold',
+			color: 'rgba(0, 0, 0, 1)',
+		},
 
-      fontWeight: 'bold',
-      color: 'rgba(0, 0, 0, 1)',
-      margin: '0.5em 0',
-      font: 'extrabold',
-      fontSize: '1.5rem',
-    },
-    RequestBox: {
-      flexDirection: 'colum',
-      justifyContent: 'start',
-    },
-    RequestBoxContainer: {
-      display: 'flex',
-      flexDirection: 'row',
-      width: '100%',
-      margin: '0 0 1em 0',
-      justifyContent: 'space-around',
-      alignItems: 'center',
-      border: '2px solid #000000',
-      borderRadius: '10px',
-      padding: '0.2em',
-      fontSize: '1.3em',
-    },
-    Requestselect: {
+		RequestminiBox1: {
 
-    },
-    RequestLocation: {
-      fontWeight: 'bold',
-      color: 'rgba(0, 0, 0, 1)',
-    },
-    RequestBoxContainer2: {
-      width: '25em',
-      position: 'relative',
-      display: 'flex',
-      justifyContent: 'start',
-      alignItems: 'center',
-      margin: '0 0 1em 0',
-    },
-    RequestminiBox1: {
+			margin: '0 0.5em 0 0',
+			border: '2px solid #000000',
+			borderRadius: '10px',
+			padding: '0.5em',
+			fontSize: '1.3em',
+			fontWeight: 'bold',
+			color: 'rgba(0, 0, 0, 1)',
+		},
+		RequestminiBox2: {
 
-      margin: '0 0.5em 0 0',
-      border: '2px solid #000000',
-      borderRadius: '10px',
-      padding: '0.5em',
-      fontSize: '1.3em',
-      fontWeight: 'bold',
-      color: 'rgba(0, 0, 0, 1)',
-    },
-    RequestminiBox2: {
+			margin: '0 0 0 0',
+			border: '2px solid #000000',
+			borderRadius: '10px',
+			padding: '0.7em',
+			fontSize: '1.3em',
+			fontWeight: 'bold',
+			color: 'rgba(0, 0, 0, 1)',
+		},
+		GuestRequest_map_img: {
 
-      margin: '0 0 0 0',
-      border: '2px solid #000000',
-      borderRadius: '10px',
-      padding: '0.7em',
-      fontSize: '1.3em',
-      fontWeight: 'bold',
-      color: 'rgba(0, 0, 0, 1)',
-    },
-    GuestRequest_map_img: {
-
-      borderRadius: '15px',
-      objectfit: 'cover',
-    },
-  };
-  return styles;
+			borderRadius: '15px',
+			objectfit: 'cover',
+		},
+	};
+	return styles;
 };
 
 export default GuestRequeststyles;

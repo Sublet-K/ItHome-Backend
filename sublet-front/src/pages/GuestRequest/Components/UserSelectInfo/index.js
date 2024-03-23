@@ -1,22 +1,47 @@
+import { AccomodationType } from "./BasicInfo/AccomodationType";
+import { LocationOnButton, SearchPriceButton, SearchDateButton } from "./BasicInfo/LocationPriceDate";
+import { BuildingType } from "./RoomInfo/BuildingType";
+import { Contract } from "./RoomInfo/Contract";
+import { LimitPeople } from "./RoomInfo/LimitPeople";
+import { NumberBathroom } from "./RoomInfo/NumberBathroom";
+import { NumberBedroom } from "./RoomInfo/NumberBedroom";
+import { NumberRoom } from "./RoomInfo/NumberRoom";
+import { RequestWord } from "./RequestWord/UserRequestWord";
+import { MoreDetails } from "./MoreDetails/MoreDetails";
 
-import { Info1 } from "./Info1/LocationPrice";
-import { Info2 } from "./Info2";
-import { Info3 } from "./Info3";
-import { Info4 } from "./Info4";
-import { Info5 } from "./Info5";
-import { RequestWord } from "./RequestWord/RequestWord";
+
+import * as s from '../styles/GuestRequest.styles.js';
 
 export function UserSelectInfo() {
+
 	return (
 		<div>
-			<p style={styles.GuestRequest_DetailTitle}>* 기본 정보 입력</p>
-			<Info1 />
-			<Info2 />
-			<p style={styles.GuestRequest_DetailTitle}>방 정보 입력</p>
-			<Info3 />
-			<Info4 />
-			<Info5 />
-			<RequestWord />
+			<s.DetailTitle>* 기본 정보 입력</s.DetailTitle>
+			<s.UserInfoContainer>
+				<LocationOnButton />
+				<SearchPriceButton />
+			</s.UserInfoContainer>
+			<s.UserInfoContainer2>
+				<SearchDateButton />
+				<AccomodationType />
+			</s.UserInfoContainer2>
+			<div>
+				<s.DetailTitle>방 정보 입력</s.DetailTitle>
+				<div>
+					<Contract />
+					<NumberRoom />
+				</div>
+				<div>
+					<BuildingType />
+					<LimitPeople />
+				</div>
+				<div>
+					<NumberBathroom />
+					<NumberBedroom />
+					<RequestWord />
+				</div>
+				<MoreDetails />
+			</div>
 		</div>
 
 	);

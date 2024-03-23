@@ -34,7 +34,7 @@ export function GuestRequestTop() {
 						{/* <span className="text-xl font-extrabold">
 							요청에 적합한 숙소가 나오면 이메일을 받으실 수 있습니다.
 						</span> */}
-						<ps.Label>요청에 적합한 숙소가 나오면 이메일을 받으실 수 있습니다.</s.Label>
+						<ps.Label>요청에 적합한 숙소가 나오면 이메일을 받으실 수 있습니다.</ps.Label>
 					</div>
 				</div>
 			</div>
