@@ -1,7 +1,7 @@
 
 import { IconButton } from '@mui/material';
 import GuestRequeststyles from './styles/GuestRequest.styles.js';
-import * as ps from "../../components/styles/Public.styles.js"
+import * as ps from '@shared/components/styles/Public.styles.js';
 
 
 

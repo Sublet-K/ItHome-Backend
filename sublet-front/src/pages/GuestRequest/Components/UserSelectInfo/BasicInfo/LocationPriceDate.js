@@ -1,7 +1,7 @@
 import { IconButton } from '@mui/material';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-import SearchPriceRange from '../../@core/Header/Desktop/components/SearchPriceRange.js';
-import SearchDate from '../../@core/Header/Desktop/components/SearchDate.js';
+import SearchPriceRange from '@core/Header/Desktop/components/SearchPriceRange.js';
+import SearchDate from '@core/Header/Desktop/components/SearchDate.js';
 
 import GuestRequeststyles from '../../styles/GuestRequest.styles.js';
 

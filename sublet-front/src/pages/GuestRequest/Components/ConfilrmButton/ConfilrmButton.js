@@ -1,5 +1,5 @@
-import { FetchRequestPost } from '@components/FetchList';
-import { roomOptionsStore } from '@pages/GuestRequest/store/RoomOptionsStore';
+import { FetchRequestPost } from '@shared/components/FetchList/FetchList';
+import { roomOptionsStore } from 'pages/GuestRequest/store/RoomOptionsStore';
 
 import * as s from '../styles/GuestRequest.styles';
 
